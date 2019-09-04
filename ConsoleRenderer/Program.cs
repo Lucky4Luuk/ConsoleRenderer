@@ -61,9 +61,17 @@ namespace ConsoleRenderer
             {
                 for (int x = 0; x < screen.GetLength(0); x++)
                 {
-                    screen[x, y] = (char)rnd.Next('a', 'z'); //Fill the screen with random characters. For testing purposes only
+                    //screen[x, y] = (char)rnd.Next('a', 'z'); //Fill the screen with random characters. For testing purposes only
+                    screen[x, y] = '-';
                 }
             }
+
+            List<Vector2> points = new List<Vector2>();
+            points.Add(new Vector2(12, 24));
+            points.Add(new Vector2(12, 48));
+            points.Add(new Vector2(64, 36));
+
+            Graphics.PolygonFill(ref screen, points);
         }
 
         //Function that renders the screen buffer to the terminal
