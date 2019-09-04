@@ -1,0 +1,6 @@
+
+.vs/ConsoleRenderer/v16/Server/sqlite3/db.lock
+*.ide-wal
+*.ide-shm
+*.ide
+.vs/ConsoleRenderer/v16/.suo
