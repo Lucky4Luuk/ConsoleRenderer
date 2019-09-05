@@ -8,66 +8,76 @@ using System.Threading.Tasks;
 namespace ConsoleRenderer
 {
 
+    struct Edge
+    {
+        public Vector2 p1; //Point 1 of edge
+        public Vector2 p2; //Point 2 of edge
+    }
+
+    struct BBOX
+    {
+        public int x1;
+        public int y1;
+        public int x2;
+        public int y2;
+    }
+
+    struct Triangle
+    {
+        public Vector2 p1; //Point 1 of triangle
+        public Vector2 p2; //Point 2 of triangle
+        public Vector2 p3; //Point 3 of triangle
+    }
+
     class Graphics
     {
-        //Taken from: https://alienryderflex.com/polygon_fill/
-        //TODO: This is broken :(
-        //Last for-loop seems to not do anything at all
-        public static void PolygonFill(ref char[,] screen, List<Vector2> points)
+
+        //Bounding box of triangle
+        static BBOX BBOX_Triangle(Triangle tri)
         {
-            int nodes, pixelX, pixelY, i, j, swap;
-            int[] nodeX = new int[Constants.MAX_POLY_CORNERS];
-            int polyCorners = points.Count();
+            BBOX bb;
+            bb.x1 = (int)Math.Min(tri.p1.X, Math.Min(tri.p2.X, tri.p3.X));
+            bb.y1 = (int)Math.Min(tri.p1.Y, Math.Min(tri.p2.Y, tri.p3.Y));
+            bb.x2 = (int)Math.Max(tri.p1.X, Math.Max(tri.p2.X, tri.p3.X));
+            bb.y2 = (int)Math.Max(tri.p1.Y, Math.Max(tri.p2.Y, tri.p3.Y));
+            return bb;
+        }
 
-            int[] polyX = new int[polyCorners];
-            int[] polyY = new int[polyCorners];
+        static bool PointInTriangle(Triangle tri, int x, int y)
+        {
+            float area = (float)(0.5f * (-tri.p2.Y * tri.p3.X + tri.p1.Y * (-tri.p2.X + tri.p3.X) + tri.p1.X * (tri.p2.Y - tri.p3.Y) + tri.p2.X * tri.p3.Y));
 
-            //Converts points to int's, stored in a way the algorithm likes
-            for (int index = 0; index < polyCorners; index++)
+            float s = 1f / (2f * area) * (tri.p1.Y * tri.p3.X - tri.p1.X * tri.p3.Y + (tri.p3.Y - tri.p1.Y) * x + (tri.p1.X - tri.p3.X) * y);
+            float t = 1f / (2f * area) * (tri.p1.X * tri.p2.Y - tri.p1.Y * tri.p2.X + (tri.p1.Y - tri.p2.Y) * x + (tri.p2.X - tri.p1.X) * y);
+
+            return (s > 0 && t > 0 && 1 - s - t > 0);
+        }
+
+        public static void TriangleFill(ref char[,] screen, Triangle tri)
+        {
+            BBOX bb = BBOX_Triangle(tri);
+
+            bb.x1 = Math.Max(bb.x1, 0);
+            bb.y1 = Math.Max(bb.y1, 0);
+            bb.x2 = Math.Min(bb.x2, Console.WindowWidth);
+            bb.y2 = Math.Min(bb.y2, Console.WindowHeight);
+
+            for (int ix = bb.x1; ix < bb.x2; ix++)
             {
-                polyX[index] = (int)Math.Floor(points[index].X);
-                polyY[index] = (int)Math.Floor(points[index].Y);
-            }
-
-            for (pixelY=0; pixelY<Console.WindowHeight; pixelY++)
-            {
-                nodes = 0; j = polyCorners - 1;
-                for (i = 0; i < polyCorners; i++)
+                for (int iy = bb.y1; iy < bb.y2; iy++)
                 {
-                    if (polyY[i] < (double)pixelY && polyY[j] >= (double)pixelY
-                      ||polyY[j] < (double)pixelY && polyY[i] >= (double)pixelY)
+                    if (PointInTriangle(tri, ix, iy))
                     {
-                        nodeX[nodes++] = (int)(polyX[i] + (pixelY - polyY[i]) / (polyY[j] - polyY[i]) * (polyX[j] - polyX[i]));
-                    }
-                    j = i;
-                }
-
-                i = 0;
-                while (i < nodes - 1)
-                {
-                    if (nodeX[i] > nodeX[i+1])
-                    {
-                        swap = nodeX[i];
-                        nodeX[i] = nodeX[i + 1];
-                        nodeX[i + 1] = swap;
-                        if (i > 0) i--;
-                    } else
-                    {
-                        i++;
-                    }
-                }
-
-                for (i=0; i<nodes; i+=2)
-                {
-                    if (nodeX[i  ] >= Console.WindowWidth) break;
-                    if (nodeX[i+1] >  0)
-                    {
-                        if (nodeX[i] < 0) nodeX[i] = 0;
-                        if (nodeX[i + 1] > Console.WindowWidth) nodeX[i + 1] = Console.WindowWidth;
-                        for (pixelX = nodeX[i]; pixelX < nodeX[i + 1]; pixelX++) screen[pixelX, pixelY] = 'b';
+                        screen[ix, iy] = 'b';
                     }
                 }
             }
+        }
+
+        //TODO: make this lol
+        public static void PolygonFill(ref char[,] screen, List<int> points)
+        {
+            
         }
     }
 }

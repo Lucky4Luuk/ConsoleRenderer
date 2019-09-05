@@ -66,12 +66,26 @@ namespace ConsoleRenderer
                 }
             }
 
-            List<Vector2> points = new List<Vector2>();
-            points.Add(new Vector2(12, 24));
-            points.Add(new Vector2(12, 48));
-            points.Add(new Vector2(64, 36));
+            /*
+            List<int> points = new List<int>();
+            points.Add(12);
+            points.Add(8);
+
+            points.Add(64);
+            points.Add(16);
+
+            points.Add(12);
+            points.Add(17);
 
             Graphics.PolygonFill(ref screen, points);
+            */
+
+            Triangle tri;
+            tri.p1 = new Vector2(12, 8);
+            tri.p2 = new Vector2(64, 16);
+            tri.p3 = new Vector2(12, 17);
+
+            Graphics.TriangleFill(ref screen, tri);
         }
 
         //Function that renders the screen buffer to the terminal
