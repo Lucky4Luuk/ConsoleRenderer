@@ -29,8 +29,25 @@ namespace ConsoleRenderer
         public Vector2 p3; //Point 3 of triangle
     }
 
+    struct Circle
+    {
+        public Vector2 pos; //Center of circle
+        public float radius; //Radius of circle
+    }
+
     class Graphics
     {
+
+        /*
+        static int Clamp(int x, int a, int b)
+        {
+            if (x < a) return a;
+            if (x > b) return b;
+            return x;
+        }
+        */
+
+        static int Clamp(int n, int min, int max) => (n >= min) ? (n <= max) ? n : max : min;
 
         //Bounding box of triangle
         static BBOX BBOX_Triangle(Triangle tri)
@@ -69,6 +86,22 @@ namespace ConsoleRenderer
                     if (PointInTriangle(tri, ix, iy))
                     {
                         screen[ix, iy] = 'b';
+                    }
+                }
+            }
+        }
+
+        public static void CircleFill(ref char[,] screen, Circle circ)
+        {
+            //BBOX of a circle is simply center -/+ radius on all sides
+            for (int ix = (int)(circ.pos.X - circ.radius); ix < (int)(circ.pos.X + circ.radius); ix++)
+            {
+                for (int iy = (int)(circ.pos.Y - circ.radius); iy < (int)(circ.pos.Y + circ.radius); iy++)
+                {
+                    float dist = (float) Math.Sqrt(Math.Pow((float)ix - circ.pos.X, 2) + Math.Pow((float)iy - circ.pos.Y, 2));
+                    if (dist < circ.radius)
+                    {
+                        screen[Clamp(ix, 0, Console.WindowWidth/2-1), Clamp(iy, 0, Console.WindowHeight-1)] = 'b';
                     }
                 }
             }
