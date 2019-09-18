@@ -58,6 +58,10 @@ namespace ConsoleRenderer
         //Faster clamp found online (thanks stackoverflow)
         static int Clamp(int n, int min, int max) => (n >= min) ? (n <= max) ? n : max : min;
 
+        ///////////////////
+        /// 2D Graphics ///
+        ///////////////////
+
         //Bounding box of triangle
         static BBOX BBOX_Triangle(Triangle tri)
         {
@@ -136,5 +140,12 @@ namespace ConsoleRenderer
         {
             
         }
+
+        ///////////////////
+        /// 3D Graphics ///
+        ///////////////////
+        
+        //TODO: raytracing or rasterizer? neither will be realtime
+        //Or perhaps a wolfenstein-esque raytracer. that might run sorta realtime
     }
 }
