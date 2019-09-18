@@ -85,7 +85,7 @@ namespace ConsoleRenderer
                 {
                     if (PointInTriangle(tri, ix, iy))
                     {
-                        screen[ix, iy] = 'b';
+                        screen[Clamp(ix, 0, Console.WindowWidth / 2 - 1), Clamp(iy, 0, Console.WindowHeight - 1)] = 'b';
                     }
                 }
             }

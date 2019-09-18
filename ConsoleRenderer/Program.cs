@@ -46,7 +46,7 @@ namespace ConsoleRenderer
             {
                 sw.Restart();
                 ClearScreen(ref screen);
-                RenderToScreen(screen, Primitives.Box, new Vector3(0f, 0f, 0f), new Vector3(1f, 1f, 1f));
+                //RenderToScreen(screen, Primitives.Box, new Vector3(0f, 0f, 0f), new Vector3(1f, 1f, 1f));
 
                 Triangle tri;
                 tri.p1 = new Vector2(12 + tri_pos, 8);
@@ -59,11 +59,11 @@ namespace ConsoleRenderer
                 circ.pos = new Vector2(12 + tri_pos, 16);
                 circ.radius = 8f;
 
-                Graphics.CircleFill(ref screen, circ);
+                //Graphics.CircleFill(ref screen, circ);
+                Graphics.TriangleFill(ref screen, tri);
 
                 tri_pos = (tri_pos + deltaTime) % 50;
 
-                //Console.WriteLine(Console.WindowWidth);
                 DrawBuffer(screen);
 
                 sw.Stop();
@@ -92,25 +92,6 @@ namespace ConsoleRenderer
                     screen[x, y] = ' ';
                 }
             }
-        }
-
-        //Function that can render primitive shapes to the screen
-        static void RenderToScreen(char[,] screen, Primitives shape, Vector3 position, Vector3 size)
-        {
-
-            /*
-            List<int> points = new List<int>();
-            points.Add(12);
-            points.Add(8);
-
-            points.Add(64);
-            points.Add(16);
-
-            points.Add(12);
-            points.Add(17);
-
-            Graphics.PolygonFill(ref screen, points);
-            */
         }
 
         //Function that renders the screen buffer to the terminal
