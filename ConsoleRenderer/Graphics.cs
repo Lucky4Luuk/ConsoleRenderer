@@ -29,6 +29,14 @@ namespace ConsoleRenderer
         public Vector2 p3; //Point 3 of triangle
     }
 
+    struct Quad
+    {
+        public Vector2 p1; //Point 1 of quad
+        public Vector2 p2; //Point 2 of quad
+        public Vector2 p3; //Point 3 of quad
+        public Vector2 p4; //Point 4 of quad
+    }
+
     struct Circle
     {
         public Vector2 pos; //Center of circle
@@ -47,6 +55,7 @@ namespace ConsoleRenderer
         }
         */
 
+        //Faster clamp found online (thanks stackoverflow)
         static int Clamp(int n, int min, int max) => (n >= min) ? (n <= max) ? n : max : min;
 
         //Bounding box of triangle
@@ -89,6 +98,21 @@ namespace ConsoleRenderer
                     }
                 }
             }
+        }
+
+        public static void QuadFill(ref char[,] screen, Quad quad)
+        {
+            Triangle tri1;
+            tri1.p1 = quad.p1;
+            tri1.p2 = quad.p2;
+            tri1.p3 = quad.p3;
+            TriangleFill(ref screen, tri1);
+
+            Triangle tri2;
+            tri2.p1 = quad.p1;
+            tri2.p2 = tri1.p3;
+            tri2.p3 = quad.p4;
+            TriangleFill(ref screen, tri2);
         }
 
         public static void CircleFill(ref char[,] screen, Circle circ)

@@ -16,9 +16,6 @@ namespace ConsoleRenderer
         //Links:
         //https://stackoverflow.com/questions/2754518/how-can-i-write-fast-colored-output-to-console
 
-        //Enum that holds a few primitive shapes
-        enum Primitives { Box, Sphere };
-
         struct Camera
         {
             public Vector3 position; //Position of the camera
@@ -46,21 +43,25 @@ namespace ConsoleRenderer
             {
                 sw.Restart();
                 ClearScreen(ref screen);
-                //RenderToScreen(screen, Primitives.Box, new Vector3(0f, 0f, 0f), new Vector3(1f, 1f, 1f));
 
                 Triangle tri;
                 tri.p1 = new Vector2(12 + tri_pos, 8);
-                tri.p2 = new Vector2(64 + tri_pos, 16);
+                tri.p2 = new Vector2(48 + tri_pos, 16);
                 tri.p3 = new Vector2(12 + tri_pos, 17);
-
-                //Graphics.TriangleFill(ref screen, tri);
 
                 Circle circ;
                 circ.pos = new Vector2(12 + tri_pos, 16);
                 circ.radius = 8f;
 
+                Quad quad;
+                quad.p1 = new Vector2(12 + tri_pos, 7);
+                quad.p2 = new Vector2(48 + tri_pos, 11);
+                quad.p3 = new Vector2(32 + tri_pos, 17);
+                quad.p4 = new Vector2(6 + tri_pos, 11);
+
                 //Graphics.CircleFill(ref screen, circ);
-                Graphics.TriangleFill(ref screen, tri);
+                //Graphics.TriangleFill(ref screen, tri);
+                Graphics.QuadFill(ref screen, quad);
 
                 tri_pos = (tri_pos + deltaTime) % 50;
 
